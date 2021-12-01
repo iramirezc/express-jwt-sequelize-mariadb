@@ -1,5 +1,8 @@
 const createError = require("http-errors");
-const { User } = require("../../db/models");
+const {
+  User,
+  Sequelize: { ValidationError },
+} = require("../../db/models");
 
 class UserController {
   static getAll(req, res, next) {
@@ -15,6 +18,28 @@ class UserController {
         });
       })
       .catch((err) => next(createError(500, err)));
+  }
+
+  static createUser(req, res, next) {
+    User.create(req.body, {
+      fields: ["firstName", "lastName", "email", "password"],
+    })
+      .then((user) => user.toJSON())
+      .then((user) => {
+        delete user.password;
+
+        res.status(201).json({
+          status: "success",
+          data: user,
+        });
+      })
+      .catch((err) => {
+        if (err instanceof ValidationError) {
+          return next(createError(400, err));
+        }
+
+        next(createError(500, err));
+      });
   }
 }
 
