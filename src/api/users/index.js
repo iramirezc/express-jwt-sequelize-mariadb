@@ -14,4 +14,7 @@ router.get("/:id", UserController.getUserById);
 // PUT /api/users/:id
 router.put("/:id", UserController.updateUserById);
 
+// DELETE /api/users/:id
+router.delete("/:id", UserController.deleteUserById);
+
 module.exports = router;

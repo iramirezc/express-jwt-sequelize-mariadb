@@ -59,11 +59,15 @@ class UserController {
 
   static updateUserById(req, res, next) {
     User.findByPk(req.params.id)
-      .then((user) =>
-        user.update(req.body, {
+      .then((user) => {
+        if (!user) {
+          throw createError(404, "User not found.");
+        }
+
+        return user.update(req.body, {
           fields: ["firstName", "lastName", "password"],
-        })
-      )
+        });
+      })
       .then((user) => user.toJSON())
       .then((user) => {
         delete user.password;
@@ -80,6 +84,19 @@ class UserController {
 
         next(createError(500, err));
       });
+  }
+
+  static deleteUserById(req, res, next) {
+    User.destroy({
+      where: { id: req.params.id },
+    })
+      .then((result) => {
+        res.status(200).json({
+          status: "success",
+          data: result,
+        });
+      })
+      .catch((err) => next(createError(500, err)));
   }
 }
 
