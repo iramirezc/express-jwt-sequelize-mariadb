@@ -41,6 +41,21 @@ class UserController {
         next(createError(500, err));
       });
   }
+
+  static getUserById(req, res, next) {
+    User.findByPk(req.params.id, {
+      attributes: {
+        exclude: ["password"],
+      },
+    })
+      .then((user) => {
+        res.status(200).json({
+          status: "success",
+          data: user,
+        });
+      })
+      .catch((err) => next(createError(500, err)));
+  }
 }
 
 module.exports = UserController;
