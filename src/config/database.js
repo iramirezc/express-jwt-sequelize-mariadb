@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const config = {
   username: process.env.MARIADB_USER || "root",
   password: process.env.MARIADB_PASSWORD || null,
