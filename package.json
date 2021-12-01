@@ -1,0 +1,42 @@
+{
+  "name": "express-jwt-sequelize-mariadb",
+  "version": "1.0.0",
+  "description": "Example of a RESTful API with JWT authentication using MariaDB as database and Sequelize as ORM.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iramirezc/express-jwt-sequelize-mariadb.git"
+  },
+  "keywords": [
+    "Express.js",
+    "JWT",
+    "Sequelize",
+    "MariaDB",
+    "RESTful",
+    "API"
+  ],
+  "author": "Isaac Ramirez <iramirezc@live.com.mx>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iramirezc/express-jwt-sequelize-mariadb/issues"
+  },
+  "homepage": "https://github.com/iramirezc/express-jwt-sequelize-mariadb#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mariadb": "^2.5.5",
+    "morgan": "^1.10.0",
+    "sequelize": "^6.12.0-alpha.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "sequelize-cli": "^6.3.0"
+  }
+}
