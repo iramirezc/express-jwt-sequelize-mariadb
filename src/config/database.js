@@ -7,6 +7,7 @@ const config = {
   host: process.env.MARIADB_HOST || "127.0.0.1",
   port: process.env.MARIADB_PORT || 3306,
   dialect: "mariadb",
+  seederStorage: "sequelize",
 };
 
 module.exports = {

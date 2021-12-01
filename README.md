@@ -15,3 +15,9 @@ npm install
 ```sh
 npx sequelize-cli db:migrate
 ```
+
+## Seed the DB
+
+```sh
+npx sequelize-cli db:seed:all
+```
