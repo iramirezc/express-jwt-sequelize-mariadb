@@ -11,4 +11,7 @@ router.post("/", UserController.createUser);
 // GET /api/users/:id
 router.get("/:id", UserController.getUserById);
 
+// PUT /api/users/:id
+router.put("/:id", UserController.updateUserById);
+
 module.exports = router;

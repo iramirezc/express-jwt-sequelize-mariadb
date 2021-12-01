@@ -56,6 +56,31 @@ class UserController {
       })
       .catch((err) => next(createError(500, err)));
   }
+
+  static updateUserById(req, res, next) {
+    User.findByPk(req.params.id)
+      .then((user) =>
+        user.update(req.body, {
+          fields: ["firstName", "lastName", "password"],
+        })
+      )
+      .then((user) => user.toJSON())
+      .then((user) => {
+        delete user.password;
+
+        res.status(200).json({
+          status: "success",
+          data: user,
+        });
+      })
+      .catch((err) => {
+        if (err instanceof ValidationError) {
+          return next(createError(400, err));
+        }
+
+        next(createError(500, err));
+      });
+  }
 }
 
 module.exports = UserController;
