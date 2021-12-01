@@ -1,4 +1,5 @@
 const { Model } = require("sequelize");
+const { ADMIN_TYPE, USER_TYPE } = require("../../constants/user-types");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -29,6 +30,11 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    userType: {
+      type: DataTypes.ENUM([ADMIN_TYPE, USER_TYPE]),
+      allowNull: false,
+      defaultValue: USER_TYPE,
     },
   };
 

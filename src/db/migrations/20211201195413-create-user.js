@@ -1,5 +1,7 @@
 "use strict";
 
+const { ADMIN_TYPE, USER_TYPE } = require("../../constants/user-types");
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Users", {
@@ -25,6 +27,11 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
         allowNull: false,
+      },
+      userType: {
+        type: Sequelize.ENUM([ADMIN_TYPE, USER_TYPE]),
+        allowNull: false,
+        defaultValue: USER_TYPE,
       },
       createdAt: {
         type: Sequelize.DATE,
