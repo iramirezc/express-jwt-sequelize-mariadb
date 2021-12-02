@@ -1,3 +1,2 @@
-web: npm run db:migrate
-web: npm run db:seed
+release: npm run db:migrate
 web: npm run start
