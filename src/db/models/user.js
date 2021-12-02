@@ -1,8 +1,26 @@
+const bcrypt = require("bcrypt");
 const { Model } = require("sequelize");
 const { ADMIN_TYPE, USER_TYPE } = require("../../constants/user-types");
 
+const hashPassword = (user) => {
+  const saltRounds = 10;
+
+  return bcrypt
+    .genSalt(saltRounds)
+    .then((salt) => {
+      return bcrypt.hash(user.password, salt);
+    })
+    .then((hash) => {
+      user.password = hash;
+    });
+};
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
+    validatePassword(password) {
+      return bcrypt.compare(password, this.password);
+    }
+
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -41,6 +59,14 @@ module.exports = (sequelize, DataTypes) => {
   const options = {
     sequelize,
     modelName: "User",
+    hooks: {
+      beforeCreate(user) {
+        return hashPassword(user);
+      },
+      beforeUpdate(user) {
+        return hashPassword(user);
+      },
+    },
   };
 
   User.init(props, options);
