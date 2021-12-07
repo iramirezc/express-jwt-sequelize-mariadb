@@ -1,7 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const authRouter = require("./auth");
-const usersRouter = require("./users");
+
+// Router /api/auth
+router.use("/auth", require("./auth"));
+
+// Router /api/account
+router.use("/account", require("./account"));
+
+// Router /api/users
+router.use("/users", require("./users"));
 
 // GET /api/health
 router.get("/health", (req, res) => {
@@ -10,11 +17,5 @@ router.get("/health", (req, res) => {
     message: "OK",
   });
 });
-
-// Router /auth
-router.use("/auth", authRouter);
-
-// Router /users
-router.use("/users", usersRouter);
 
 module.exports = router;
