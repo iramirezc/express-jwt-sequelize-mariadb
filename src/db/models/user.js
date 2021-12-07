@@ -1,24 +1,16 @@
-const bcrypt = require("bcrypt");
 const { Model } = require("sequelize");
 const { ADMIN_TYPE, USER_TYPE } = require("../../constants/user-types");
-
-const hashPassword = (user) => {
-  const saltRounds = 10;
-
-  return bcrypt
-    .genSalt(saltRounds)
-    .then((salt) => {
-      return bcrypt.hash(user.password, salt);
-    })
-    .then((hash) => {
-      user.password = hash;
-    });
-};
+const { hashPassword, validatePassword } = require("../../utils/auth");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
+    /**
+     * Validates user password.
+     * @param {string} password
+     * @returns Promise
+     */
     validatePassword(password) {
-      return bcrypt.compare(password, this.password);
+      return validatePassword(this, password);
     }
 
     /**
