@@ -40,6 +40,10 @@ const getUserById = (req, res, next) => {
     },
   })
     .then((user) => {
+      if (!user) {
+        throw createError(404, "User not found.");
+      }
+
       res.status(200).json(successResponse(User.sanitize(user)));
     })
     .catch(next);
