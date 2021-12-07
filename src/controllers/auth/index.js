@@ -48,7 +48,7 @@ const login = (req, res, next) => {
  * Requires authentication.
  */
 const whoami = (req, res) => {
-  res.status(200).json(successResponse(req.user));
+  res.status(200).json(successResponse(User.sanitize(req.user)));
 };
 
 module.exports = {

@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
 
     const { userId } = decoded;
 
-    User.findByPk(userId, { attributes: { exclude: ["password", "userType"] } })
+    User.findByPk(userId, { attributes: { exclude: ["password"] } })
       .then((user) => {
         if (!user) {
           throw createError(401, "Unauthorized", {
@@ -21,7 +21,7 @@ module.exports = (req, res, next) => {
           });
         }
 
-        req.user = User.sanitize(user);
+        req.user = user;
 
         next();
       })
