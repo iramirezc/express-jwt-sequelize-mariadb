@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 /**
  * Hashes user password.
@@ -29,7 +30,19 @@ const validatePassword = (user, password) => {
   return bcrypt.compare(password, user.password);
 };
 
+/**
+ * Creates a Json Web Token.
+ * @param {*} payload
+ * @returns string
+ */
+const createJWT = (payload) => {
+  return jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: parseInt(process.env.JWT_EXPIRATION, 10),
+  });
+};
+
 module.exports = {
   hashPassword,
   validatePassword,
+  createJWT,
 };

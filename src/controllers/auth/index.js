@@ -1,56 +1,57 @@
 const createError = require("http-errors");
-const jwt = require("jsonwebtoken");
 const { User } = require("../../db/models");
+const { successResponse } = require("../../utils/response");
+const { createJWT } = require("../../utils/auth");
 
-class AuthController {
-  static login(req, res, next) {
-    let userId;
+/**
+ * Responds with a JWT if user credentials are valid.
+ */
+const login = (req, res, next) => {
+  let userId;
 
-    if (!req.body.email) {
-      return next(createError(400, "email must be provided."));
-    }
-
-    if (!req.body.password) {
-      return next(createError(400, "password must be provided."));
-    }
-
-    User.findOne({ where: { email: req.body.email } })
-      .then((user) => {
-        if (!user) {
-          throw createError(401, "Invalid credentials.", {
-            reason: "Email not found.",
-          });
-        }
-
-        userId = user.id;
-
-        return user.validatePassword(req.body.password);
-      })
-      .then((isValidPassword) => {
-        if (!isValidPassword) {
-          throw createError(401, "Invalid credentials.", {
-            reason: "Invalid password.",
-          });
-        }
-
-        const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
-          expiresIn: parseInt(process.env.JWT_EXPIRATION, 10),
-        });
-
-        res.status(200).json({
-          status: "success",
-          data: { token },
-        });
-      })
-      .catch((err) => next(createError(500, err)));
+  if (!req.body.email) {
+    return next(createError(400, "email must be provided."));
   }
 
-  static whoami(req, res) {
-    res.status(200).json({
-      status: "success",
-      data: req.user,
-    });
+  if (!req.body.password) {
+    return next(createError(400, "password must be provided."));
   }
-}
 
-module.exports = AuthController;
+  User.findOne({ where: { email: req.body.email } })
+    .then((user) => {
+      if (!user) {
+        throw createError(401, "Invalid credentials.", {
+          reason: "Email not found.",
+        });
+      }
+
+      userId = user.id;
+
+      return user.validatePassword(req.body.password);
+    })
+    .then((isValidPassword) => {
+      if (!isValidPassword) {
+        throw createError(401, "Invalid credentials.", {
+          reason: "Invalid password.",
+        });
+      }
+
+      const token = createJWT({ userId });
+
+      res.status(200).json(successResponse({ token }));
+    })
+    .catch(next);
+};
+
+/**
+ * Responds with user info.
+ * Requires authentication.
+ */
+const whoami = (req, res) => {
+  res.status(200).json(successResponse(req.user));
+};
+
+module.exports = {
+  login,
+  whoami,
+};
