@@ -1,6 +1,6 @@
 "use strict";
 
-const { ADMIN_TYPE, USER_TYPE } = require("../../constants/user-types");
+const { ADMIN_TYPE, USER_TYPE } = require("../../constants/userTypes");
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {

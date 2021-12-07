@@ -1,5 +1,5 @@
 const { Model } = require("sequelize");
-const { ADMIN_TYPE, USER_TYPE } = require("../../constants/user-types");
+const { ADMIN_TYPE, USER_TYPE } = require("../../constants/userTypes");
 const { hashPassword, validatePassword } = require("../../utils/auth");
 
 module.exports = (sequelize, DataTypes) => {
