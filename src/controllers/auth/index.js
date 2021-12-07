@@ -44,6 +44,13 @@ class AuthController {
       })
       .catch((err) => next(createError(500, err)));
   }
+
+  static whoami(req, res) {
+    res.status(200).json({
+      status: "success",
+      data: req.user,
+    });
+  }
 }
 
 module.exports = AuthController;

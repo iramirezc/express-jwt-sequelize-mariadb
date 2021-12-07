@@ -21,6 +21,23 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
+
+    /**
+     * Returns user as an object with no sensitive data.
+     * @param {User} user
+     */
+    static sanitize(user) {
+      const { firstName, lastName, email, createdAt, updatedAt } =
+        user.toJSON();
+
+      return {
+        firstName,
+        lastName,
+        email,
+        createdAt,
+        updatedAt,
+      };
+    }
   }
 
   const props = {
