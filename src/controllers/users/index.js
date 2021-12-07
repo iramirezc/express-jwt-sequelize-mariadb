@@ -1,103 +1,87 @@
 const createError = require("http-errors");
-const {
-  User,
-  Sequelize: { ValidationError },
-} = require("../../db/models");
+const { User } = require("../../db/models");
+const { successResponse } = require("../../utils/response");
 
-class UserController {
-  static getAll(req, res, next) {
-    User.findAll({
-      attributes: {
-        exclude: ["password"],
-      },
+/**
+ * Retrieve all users from DB.
+ */
+const getAll = (req, res, next) => {
+  User.findAll({
+    attributes: {
+      exclude: ["password"],
+    },
+  })
+    .then((users) => {
+      res.status(200).json(successResponse(users));
     })
-      .then((users) => {
-        res.status(200).json({
-          status: "success",
-          data: users,
-        });
-      })
-      .catch((err) => next(createError(500, err)));
-  }
+    .catch(next);
+};
 
-  static createUser(req, res, next) {
-    User.create(req.body, {
-      fields: ["firstName", "lastName", "email", "password"],
+/**
+ * Create a new user.
+ */
+const createUser = (req, res, next) => {
+  User.create(req.body, {
+    fields: ["firstName", "lastName", "email", "password"],
+  })
+    .then((user) => {
+      res.status(201).json(successResponse(User.sanitize(user)));
     })
-      .then((user) => user.toJSON())
-      .then((user) => {
-        delete user.password;
+    .catch(next);
+};
 
-        res.status(201).json({
-          status: "success",
-          data: user,
-        });
-      })
-      .catch((err) => {
-        if (err instanceof ValidationError) {
-          return next(createError(400, err));
-        }
+/**
+ * Retrieve a user by Id.
+ */
+const getUserById = (req, res, next) => {
+  User.findByPk(req.params.id, {
+    attributes: {
+      exclude: ["password"],
+    },
+  })
+    .then((user) => {
+      res.status(200).json(successResponse(User.sanitize(user)));
+    })
+    .catch(next);
+};
 
-        next(createError(500, err));
+/**
+ * Update a user by Id.
+ */
+const updateUserById = (req, res, next) => {
+  User.findByPk(req.params.id)
+    .then((user) => {
+      if (!user) {
+        throw createError(404, "User not found.");
+      }
+
+      return user.update(req.body, {
+        fields: ["firstName", "lastName", "password"],
       });
-  }
-
-  static getUserById(req, res, next) {
-    User.findByPk(req.params.id, {
-      attributes: {
-        exclude: ["password"],
-      },
     })
-      .then((user) => {
-        res.status(200).json({
-          status: "success",
-          data: user,
-        });
-      })
-      .catch((err) => next(createError(500, err)));
-  }
-
-  static updateUserById(req, res, next) {
-    User.findByPk(req.params.id)
-      .then((user) => {
-        if (!user) {
-          throw createError(404, "User not found.");
-        }
-
-        return user.update(req.body, {
-          fields: ["firstName", "lastName", "password"],
-        });
-      })
-      .then((user) => user.toJSON())
-      .then((user) => {
-        delete user.password;
-
-        res.status(200).json({
-          status: "success",
-          data: user,
-        });
-      })
-      .catch((err) => {
-        if (err instanceof ValidationError) {
-          return next(createError(400, err));
-        }
-
-        next(createError(500, err));
-      });
-  }
-
-  static deleteUserById(req, res, next) {
-    User.destroy({
-      where: { id: req.params.id },
+    .then((user) => {
+      res.status(200).json(successResponse(User.sanitize(user)));
     })
-      .then((result) => {
-        res.status(200).json({
-          status: "success",
-          data: result,
-        });
-      })
-      .catch((err) => next(createError(500, err)));
-  }
-}
+    .catch(next);
+};
 
-module.exports = UserController;
+/**
+ * Delete a user from DB.
+ */
+const deleteUserById = (req, res, next) => {
+  User.destroy({
+    where: { id: req.params.id },
+  })
+    .then((result) => {
+      res.status(200).json(successResponse({ result }));
+    })
+    .catch(next);
+};
+
+module.exports = {
+  getAll,
+  createUser,
+  getUserById,
+  updateUserById,
+  deleteUserById,
+};

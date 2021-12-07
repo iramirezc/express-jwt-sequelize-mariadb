@@ -27,10 +27,11 @@ module.exports = (sequelize, DataTypes) => {
      * @param {User} user
      */
     static sanitize(user) {
-      const { firstName, lastName, email, createdAt, updatedAt } =
+      const { id, firstName, lastName, email, createdAt, updatedAt } =
         user.toJSON();
 
       return {
+        id,
         firstName,
         lastName,
         email,
