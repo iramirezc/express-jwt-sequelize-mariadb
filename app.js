@@ -20,7 +20,9 @@ app.use((req, res, next) => {
   next(createError(404, "Resource not found."));
 });
 
-// error handler
+// error handlers
+app.use(require("./src/middleware/errorLogger"));
+
 app.use((err, req, res, next) => {
   const error = req.app.get("env") === "development" ? err : createError(500);
   const statusCode = error.status || 500;
