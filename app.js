@@ -30,16 +30,7 @@ app.use(require("./src/middleware/logError"));
 
 app.use(require("./src/middleware/clientError"));
 
-app.use((err, req, res, next) => {
-  const error = req.app.get("env") === "development" ? err : createError(500);
-  const statusCode = error.status || 500;
-
-  res.status(statusCode).json({
-    status: "error",
-    code: statusCode,
-    message: error.message,
-  });
-});
+app.use(require("./src/middleware/serverError"));
 
 // start
 app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
