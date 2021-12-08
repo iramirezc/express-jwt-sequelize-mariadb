@@ -1,11 +1,13 @@
 const authenticated = require("./authenticated");
 const authorized = require("./authorized");
 const adminOnly = require("./adminOnly");
-const errorLogger = require("./errorLogger");
+const logError = require("./logError");
+const clientError = require("./clientError");
 
 module.exports = {
   authenticated,
   authorized,
   adminOnly,
-  errorLogger,
+  logError,
+  clientError,
 };

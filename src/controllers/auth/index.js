@@ -10,11 +10,13 @@ const login = (req, res, next) => {
   let userId;
 
   if (!req.body.email) {
-    return next(createError(400, "email must be provided."));
+    next(createError(400, "email must be provided.", { path: "email" }));
+    return;
   }
 
   if (!req.body.password) {
-    return next(createError(400, "password must be provided."));
+    next(createError(400, "password must be provided.", { path: "password" }));
+    return;
   }
 
   User.findOne({ where: { email: req.body.email } })

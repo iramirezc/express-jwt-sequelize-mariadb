@@ -8,7 +8,8 @@ module.exports = (req, res, next) => {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      return next(createError(401, err, { reason: "Invalid Token" }));
+      next(createError(401, err, { reason: "Invalid Token" }));
+      return;
     }
 
     const { userId } = decoded;

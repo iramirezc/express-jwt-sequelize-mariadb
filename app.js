@@ -16,7 +16,7 @@ app.use(express.json());
 app.use("/api", apiRouter);
 
 // welcome index page
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).send("<h1>Welcome!</h1><p>Start by exploring the API.</p>");
 });
 
@@ -26,7 +26,9 @@ app.use((req, res, next) => {
 });
 
 // error handlers
-app.use(require("./src/middleware/errorLogger"));
+app.use(require("./src/middleware/logError"));
+
+app.use(require("./src/middleware/clientError"));
 
 app.use((err, req, res, next) => {
   const error = req.app.get("env") === "development" ? err : createError(500);
