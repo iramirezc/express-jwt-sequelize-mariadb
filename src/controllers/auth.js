@@ -1,7 +1,7 @@
 const createError = require("http-errors");
-const { User } = require("../../db/models");
-const { successResponse } = require("../../utils/response");
-const { createJWT } = require("../../utils/auth");
+const { User } = require("../db/models");
+const { successResponse } = require("../utils/response");
+const { createJWT } = require("../utils/auth");
 
 /**
  * Create a new User account.

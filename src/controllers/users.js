@@ -1,6 +1,6 @@
 const createError = require("http-errors");
-const { User } = require("../../db/models");
-const { successResponse } = require("../../utils/response");
+const { User } = require("../db/models");
+const { successResponse } = require("../utils/response");
 
 /**
  * Retrieve all users from DB.

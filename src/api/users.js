@@ -1,7 +1,6 @@
-const express = require("express");
-const UsersController = require("../../controllers/users");
-const { adminOnly } = require("../../middleware");
-const router = express.Router();
+const router = require("express").Router();
+const { UsersController } = require("../controllers");
+const { adminOnly } = require("../middleware");
 
 // GET /api/users
 router.get("/", adminOnly, UsersController.getAll);
