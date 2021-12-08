@@ -4,9 +4,6 @@ const router = express.Router();
 // Router /api/auth
 router.use("/auth", require("./auth"));
 
-// Router /api/account
-router.use("/account", require("./account"));
-
 // Router /api/users
 router.use("/users", require("./users"));
 

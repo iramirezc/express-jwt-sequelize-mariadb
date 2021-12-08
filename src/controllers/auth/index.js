@@ -4,9 +4,22 @@ const { successResponse } = require("../../utils/response");
 const { createJWT } = require("../../utils/auth");
 
 /**
- * Responds with a JWT if user credentials are valid.
+ * Create a new User account.
  */
-const login = (req, res, next) => {
+const signUp = (req, res, next) => {
+  User.create(req.body, {
+    fields: ["firstName", "lastName", "email", "password"],
+  })
+    .then((user) => {
+      res.status(201).json(successResponse(User.sanitize(user)));
+    })
+    .catch(next);
+};
+
+/**
+ * Respond with a JWT if user credentials are valid.
+ */
+const signIn = (req, res, next) => {
   let userId;
 
   if (!req.body.email) {
@@ -46,14 +59,15 @@ const login = (req, res, next) => {
 };
 
 /**
- * Responds with user info.
- * Requires authentication.
+ * Respond with user info.
+ * NOTE: Requires authentication.
  */
 const whoami = (req, res) => {
   res.status(200).json(successResponse(User.sanitize(req.user)));
 };
 
 module.exports = {
-  login,
+  signUp,
+  signIn,
   whoami,
 };
