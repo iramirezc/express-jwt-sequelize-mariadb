@@ -12,8 +12,13 @@ const app = express();
 app.use(logger("dev"));
 app.use(express.json());
 
-// routes
+// API routes
 app.use("/api", apiRouter);
+
+// welcome index page
+app.use("/", (req, res) => {
+  res.status(200).send("<h1>Welcome!</h1><p>Start by exploring the API.</p>");
+});
 
 // 404 handler
 app.use((req, res, next) => {
