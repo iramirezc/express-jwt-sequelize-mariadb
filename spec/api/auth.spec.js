@@ -119,6 +119,50 @@ describe("Auth API Endpoints", () => {
             .toHaveSize(3);
         });
     });
+
+    it("should respond with an unauthorized error when email is not valid", () => {
+      return createDBTestUser()
+        .then(() => {
+          return request(app)
+            .post("/api/auth/signIn")
+            .send({
+              email: "someuser@example.com",
+              password: "pass_good",
+            })
+            .expect("Content-Type", /json/)
+            .expect(401);
+        })
+        .then((res) => {
+          expect(res.body).toEqual({
+            status: "fail",
+            data: {
+              error: "Invalid credentials.",
+            },
+          });
+        });
+    });
+
+    it("should respond with an unauthorized error when password is not valid", () => {
+      return createDBTestUser()
+        .then(() => {
+          return request(app)
+            .post("/api/auth/signIn")
+            .send({
+              email: "bjorn@example.com",
+              password: "pass_wrong",
+            })
+            .expect("Content-Type", /json/)
+            .expect(401);
+        })
+        .then((res) => {
+          expect(res.body).toEqual({
+            status: "fail",
+            data: {
+              error: "Invalid credentials.",
+            },
+          });
+        });
+    });
   });
 
   describe("User signs up and then signs in", () => {
