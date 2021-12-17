@@ -12,6 +12,6 @@ const config = {
 
 module.exports = {
   development: { ...config },
-  test: { ...config },
+  test: { ...config, dialect: "sqlite", logging: false },
   production: { ...config },
 };
