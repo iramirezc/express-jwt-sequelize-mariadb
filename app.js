@@ -2,10 +2,8 @@ require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
 const logger = require("morgan");
-
 const apiRouter = require("./src/api");
 
-const PORT = process.env.PORT || 3000;
 const app = express();
 
 // middleware
@@ -27,10 +25,7 @@ app.use((req, res, next) => {
 
 // error handlers
 app.use(require("./src/middleware/logError"));
-
 app.use(require("./src/middleware/clientError"));
-
 app.use(require("./src/middleware/serverError"));
 
-// start
-app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
+module.exports = app;

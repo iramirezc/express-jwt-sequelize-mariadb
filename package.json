@@ -4,8 +4,8 @@
   "description": "Example of a RESTful API with JWT authentication using MariaDB as database and Sequelize as ORM.",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
     "db:migrate": "sequelize-cli db:migrate",
     "db:seed": "sequelize-cli db:seed:all",
     "test": "jasmine"
