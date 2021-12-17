@@ -3,8 +3,12 @@ const createError = require("http-errors");
 const express = require("express");
 const logger = require("morgan");
 const apiRouter = require("./src/api");
+const db = require("./src/db/models");
 
 const app = express();
+
+// make db available
+app.set("db", db);
 
 // middleware
 app.use(logger("dev"));
