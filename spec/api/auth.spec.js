@@ -1,6 +1,15 @@
 const request = require("supertest");
 const app = require("../../app");
 
+function createDBTestUser() {
+  return app.get("db").User.create({
+    firstName: "Björn",
+    lastName: "Ironside",
+    email: "bjorn@example.com",
+    password: "pass_good",
+  });
+}
+
 describe("Auth API Endpoints", () => {
   afterEach(() => {
     return app.get("db").User.destroy({ truncate: true });
@@ -40,18 +49,54 @@ describe("Auth API Endpoints", () => {
             .not.toBeNaN();
         });
     });
+
+    it("should respond with a bad request error when email already exists", () => {
+      return createDBTestUser()
+        .then(() => {
+          return request(app)
+            .post("/api/auth/signUp")
+            .send({
+              firstName: "Björn2",
+              lastName: "Ironside2",
+              email: "bjorn@example.com",
+              password: "pass_good",
+            })
+            .expect("Content-Type", /json/)
+            .expect(400);
+        })
+        .then((res) => {
+          expect(res.body).toEqual({
+            status: "fail",
+            data: {
+              email: "email must be unique",
+            },
+          });
+        });
+    });
+
+    it("should respond with a bad request error when payload is not valid", () => {
+      return request(app)
+        .post("/api/auth/signUp")
+        .send({})
+        .expect("Content-Type", /json/)
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({
+            status: "fail",
+            data: {
+              firstName: "User.firstName cannot be null",
+              lastName: "User.lastName cannot be null",
+              email: "User.email cannot be null",
+              password: "User.password cannot be null",
+            },
+          });
+        });
+    });
   });
 
   describe("POST /api/auth/signIn", () => {
-    it("should return a JWT token when credentials are valid", () => {
-      return app
-        .get("db")
-        .User.create({
-          firstName: "Bjorn",
-          lastName: "Ironside",
-          email: "bjorn@example.com",
-          password: "pass_good",
-        })
+    it("should respond with a JWT token when credentials are valid", () => {
+      return createDBTestUser()
         .then(() => {
           return request(app)
             .post("/api/auth/signIn")
